@@ -1,0 +1,34 @@
+# Local/private files
+captures/
+data/
+pages/
+__pycache__/
+.env
+.env.*
+*.log
+*.jsonl
+*.har
+*.pcap
+*.pcapng
+*.pem
+*.key
+*.crt
+*.cer
+*cookie*
+*token*
+*session*
+
+# Do not upload private backend code by accident
+wgame_query_server.py
+ops_control_center.py
+frp_auth_proxy.py
+current_match_probe.py
+watch-friend-aliases.py
+*.ps1
+*.cmd
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
