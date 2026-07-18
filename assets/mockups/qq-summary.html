@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QQ 群战绩回复 - WGame VAL Query</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1118;
+      --panel: #141f2a;
+      --panel2: #101923;
+      --line: #2b3a49;
+      --line2: #385066;
+      --text: #f0f8ff;
+      --muted: #90a7bb;
+      --blue: #8ed4ff;
+      --green: #32ee91;
+      --red: #ff456f;
+      --gold: #ffd166;
+      --bubble: #203247;
+      --bubble2: #ffe0a3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 900px;
+      background:
+        linear-gradient(135deg, rgba(142,212,255,.10), transparent 34%),
+        linear-gradient(315deg, rgba(255,209,102,.10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    main {
+      width: 1400px;
+      height: 900px;
+      margin: 0 auto;
+      padding: 34px 42px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+    }
+    .intro {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20,31,42,.96);
+      padding: 26px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      line-height: 1.12;
+    }
+    .lead {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .feature {
+      display: grid;
+      gap: 10px;
+    }
+    .feature div {
+      border: 1px solid var(--line2);
+      border-radius: 7px;
+      background: var(--panel2);
+      padding: 13px 14px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .feature b { color: var(--gold); }
+    .site {
+      color: var(--blue);
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .chat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(16,25,35,.97);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 0;
+    }
+    .chat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.025);
+      padding: 18px 22px;
+    }
+    .group-title strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+    .group-title span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .demo {
+      border: 1px solid var(--line2);
+      border-radius: 999px;
+      padding: 8px 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .messages {
+      padding: 28px 30px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 220px),
+        #0f1822;
+    }
+    .msg {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: start;
+    }
+    .msg.user {
+      grid-template-columns: minmax(0, 1fr) 46px;
+    }
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #101923;
+      background: var(--gold);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .avatar.bot {
+      color: var(--text);
+      background: linear-gradient(135deg, #1a9cff, #29ec91);
+    }
+    .avatar.user {
+      color: #fff;
+      background: linear-gradient(135deg, #41566e, #27384b);
+    }
+    .name {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 7px;
+    }
+    .msg.user .name {
+      text-align: right;
+    }
+    .bubble {
+      display: inline-block;
+      max-width: 760px;
+      border: 1px solid var(--line2);
+      border-radius: 9px;
+      padding: 15px 16px;
+      background: var(--bubble);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      box-shadow: 0 16px 34px rgba(0,0,0,.18);
+    }
+    .msg.user .body {
+      text-align: right;
+    }
+    .msg.user .bubble {
+      background: var(--bubble2);
+      border-color: rgba(255,209,102,.55);
+      color: #101923;
+      font-weight: 800;
+    }
+    .summary {
+      width: 760px;
+      padding: 0;
+      overflow: hidden;
+      white-space: normal;
+    }
+    .sum-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid rgba(142,212,255,.22);
+      padding: 15px 16px 13px;
+      background: rgba(142,212,255,.06);
+    }
+    .sum-head strong {
+      font-size: 20px;
+    }
+    .record {
+      color: var(--gold);
+      font-size: 15px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .match {
+      display: grid;
+      grid-template-columns: 42px 74px 86px 150px 108px 72px 96px 60px;
+      gap: 8px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(142,212,255,.13);
+      font-size: 14px;
+    }
+    .match:last-child { border-bottom: 0; }
+    .idx { color: var(--blue); font-weight: 900; }
+    .win { color: var(--green); font-weight: 900; }
+    .loss { color: var(--red); font-weight: 900; }
+    .hero {
+      color: #fff;
+      font-weight: 900;
+    }
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      display: block;
+      margin-top: 2px;
+    }
+    .rr.plus { color: var(--green); font-weight: 900; }
+    .rr.minus { color: var(--red); font-weight: 900; }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 14px 20px;
+      color: var(--muted);
+      background: rgba(255,255,255,.02);
+      font-size: 13px;
+    }
+    .input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .fake-input {
+      width: 560px;
+      height: 36px;
+      border: 1px solid var(--line2);
+      border-radius: 6px;
+      background: #0b141e;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      color: #b9cede;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <aside class="intro">
+    <div>
+      <div class="brand"><div class="mark">V</div> WGame VAL Query</div>
+      <h1>QQ 群里直接查近 5 场战绩</h1>
+      <div class="lead">
+        群友发送一个昵称#ID，机器人调用主站接口，把近期战绩拼成可读文本返回。适合开黑群、战队群、陪玩群和水友群快速看状态。
+      </div>
+      <div class="feature">
+        <div><b>触发：</b>查瓦 GGbone#55989</div>
+        <div><b>返回：</b>胜负、比分、英雄、KDA、ACS、地图、段位和 RR</div>
+        <div><b>目标：</b>少开页面，群里直接看结果</div>
+      </div>
+    </div>
+    <div class="site">在线入口：val.skzspro.cn/public</div>
+  </aside>
+
+  <section class="chat">
+    <div class="chat-head">
+      <div class="group-title">
+        <strong>无畏契约开黑群</strong>
+        <span>在线 28 人 · 群战绩助手已开启</span>
+      </div>
+      <div class="demo">演示数据 · 截图用</div>
+    </div>
+
+    <div class="messages">
+      <div class="msg user">
+        <div class="body">
+          <div class="name">群友 A</div>
+          <div class="bubble">查瓦 GGbone#55989</div>
+        </div>
+        <div class="avatar user">A</div>
+      </div>
+
+      <div class="msg">
+        <div class="avatar bot">VAL</div>
+        <div class="body">
+          <div class="name">VAL 战绩助手</div>
+          <div class="bubble summary">
+            <div class="sum-head">
+              <strong>无畏契约战绩：GGbone#55989</strong>
+              <div class="record">近5场 · 4胜1负</div>
+            </div>
+            <div class="match">
+              <div class="idx">1</div>
+              <div><b>07-18</b><span class="small">08:24</span></div>
+              <div class="win">胜利<span class="small">13:3</span></div>
+              <div class="hero">芮娜 / Reyna</div>
+              <div>KDA 36/10/8</div>
+              <div>ACS 664</div>
+              <div>Jam<span class="small">青铜2</span></div>
+              <div class="rr plus">+39</div>
+            </div>
+            <div class="match">
+              <div class="idx">2</div>
+              <div><b>07-12</b><span class="small">17:33</span></div>
+              <div class="win">胜利<span class="small">13:2</span></div>
+              <div class="hero">不死鸟 / Phoenix</div>
+              <div>KDA 29/6/6</div>
+              <div>ACS 509</div>
+              <div>Ascent<span class="small">青铜2</span></div>
+              <div class="rr plus">+34</div>
+            </div>
+            <div class="match">
+              <div class="idx">3</div>
+              <div><b>07-10</b><span class="small">01:09</span></div>
+              <div class="loss">失败<span class="small">0:13</span></div>
+              <div class="hero">雷兹 / Raze</div>
+              <div>KDA 1/7/0</div>
+              <div>ACS 47</div>
+              <div>Triad<span class="small">青铜2</span></div>
+              <div class="rr minus">-25</div>
+            </div>
+            <div class="match">
+              <div class="idx">4</div>
+              <div><b>07-10</b><span class="small">00:55</span></div>
+              <div class="win">胜利<span class="small">14:12</span></div>
+              <div class="hero">雷兹 / Raze</div>
+              <div>KDA 17/23/8</div>
+              <div>ACS 197</div>
+              <div>Triad<span class="small">青铜2</span></div>
+              <div class="rr plus">+11</div>
+            </div>
+            <div class="match">
+              <div class="idx">5</div>
+              <div><b>07-10</b><span class="small">00:04</span></div>
+              <div class="win">胜利<span class="small">13:8</span></div>
+              <div class="hero">雷兹 / Raze</div>
+              <div>KDA 14/14/9</div>
+              <div>ACS 208</div>
+              <div>Jam<span class="small">青铜2</span></div>
+              <div class="rr plus">+22</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg user">
+        <div class="body">
+          <div class="name">群友 B</div>
+          <div class="bubble">这下进队前能先看状态了</div>
+        </div>
+        <div class="avatar user">B</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="input"><span>消息</span><div class="fake-input">输入“查瓦 昵称#ID”查询近 5 场</div></div>
+      <span>WGame VAL Query</span>
+    </div>
+  </section>
+</main>
+</body>
+</html>

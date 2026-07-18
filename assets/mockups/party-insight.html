@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>疑似组队关系 - WGame VAL Query</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1118;
+      --panel: #141f2a;
+      --panel2: #101923;
+      --line: #2b3a49;
+      --line2: #385066;
+      --text: #f0f8ff;
+      --muted: #93aabd;
+      --blue: #88d7ff;
+      --green: #30ec91;
+      --red: #ff456f;
+      --gold: #ffd166;
+      --chip: #213246;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(136,215,255,.11), transparent 26%),
+        radial-gradient(circle at 90% 20%, rgba(255,69,111,.10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    main {
+      width: 1600px;
+      min-height: 900px;
+      margin: 0 auto;
+      padding: 26px 28px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 22px;
+    }
+    .mark {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      font-weight: 900;
+    }
+    .badge {
+      border: 1px solid var(--line2);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 26px;
+      padding: 22px 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20,31,42,.96);
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      line-height: 1.12;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 120px);
+      gap: 10px;
+      align-self: center;
+    }
+    .stat {
+      border: 1px solid var(--line2);
+      border-radius: 7px;
+      background: var(--panel2);
+      padding: 11px 12px;
+    }
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+      display: block;
+    }
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 18px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(20,31,42,.96);
+      overflow: hidden;
+    }
+    .panel h2 {
+      margin: 0;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.025);
+      font-size: 21px;
+    }
+    .side-block {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .side-block:last-child { border-bottom: 0; }
+    .side-title {
+      display: flex;
+      justify-content: space-between;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .player {
+      min-height: 62px;
+      border: 1px solid var(--line2);
+      border-left: 4px solid var(--blue);
+      border-radius: 7px;
+      background: #101923;
+      padding: 10px 12px;
+      margin-bottom: 9px;
+    }
+    .enemy .player { border-left-color: var(--red); }
+    .player strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .player span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .content {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 18px;
+      min-width: 0;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 16px;
+    }
+    .relation {
+      border: 1px solid var(--line2);
+      border-radius: 8px;
+      background: var(--panel2);
+      padding: 16px;
+      min-height: 190px;
+    }
+    .relation.good { border-color: rgba(48,236,145,.5); }
+    .relation.warn { border-color: rgba(255,209,102,.55); }
+    .relation.bad { border-color: rgba(255,69,111,.45); }
+    .relation-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .relation-title {
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .score {
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,209,102,.13);
+      border: 1px solid rgba(255,209,102,.42);
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 34px 1fr;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 13px;
+    }
+    .person {
+      border-radius: 7px;
+      background: var(--chip);
+      padding: 10px;
+      min-height: 66px;
+    }
+    .person strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .person span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .link {
+      color: var(--gold);
+      text-align: center;
+      font-size: 21px;
+      font-weight: 900;
+    }
+    .notes {
+      display: grid;
+      gap: 7px;
+      color: #d8f1ff;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .notes b { color: var(--green); }
+    .table-wrap {
+      padding: 0;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+      line-height: 1.42;
+    }
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      overflow-wrap: anywhere;
+    }
+    th {
+      color: var(--blue);
+      background: #101923;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .tag {
+      display: inline-flex;
+      min-width: 50px;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .tag.ally { color: var(--blue); background: rgba(136,215,255,.11); border: 1px solid rgba(136,215,255,.35); }
+    .tag.enemy-tag { color: var(--red); background: rgba(255,69,111,.12); border: 1px solid rgba(255,69,111,.35); }
+    .tag.same { color: var(--green); background: rgba(48,236,145,.11); border: 1px solid rgba(48,236,145,.35); }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+  </style>
+</head>
+<body>
+<main>
+  <div class="topbar">
+    <div class="brand"><div class="mark">V</div> WGame VAL Query</div>
+    <div class="badge">演示数据 · 用于项目截图</div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <h1>当前对局疑似组队关系</h1>
+      <div class="subtitle">基于当前阵营、近几场共同出现、同队/敌方历史关系生成提示，帮助进局前快速判断排位结构。</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>加载状态</span><strong>10/10</strong></div>
+      <div class="stat"><span>疑似组合</span><strong>3 组</strong></div>
+      <div class="stat"><span>最高置信</span><strong>86%</strong></div>
+      <div class="stat"><span>当前模式</span><strong>竞技</strong></div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside class="panel">
+      <h2>当前阵营</h2>
+      <div class="side-block">
+        <div class="side-title"><span>我方 Blue</span><span>5 人</span></div>
+        <div class="player"><strong>康神开播了#73193</strong><span>K/O / KAYO · 青铜3 · 当前同队</span></div>
+        <div class="player"><strong>小猫不急#47218</strong><span>贤者 / Sage · 白银1 · 当前同队</span></div>
+        <div class="player"><strong>GGbone#55989</strong><span>芮娜 / Reyna · 青铜2 · 当前同队</span></div>
+        <div class="player"><strong>风里有回声#20665</strong><span>猎枭 / Sova · 白银1 · 当前同队</span></div>
+        <div class="player"><strong>Li7#19671</strong><span>捷风 / Jett · 黄金3 · 当前同队</span></div>
+      </div>
+      <div class="side-block enemy">
+        <div class="side-title"><span>敌方 Red</span><span>5 人</span></div>
+        <div class="player"><strong>别颗秒我#19729</strong><span>暮蝶 / Clove · 黄金2 · 当前敌方</span></div>
+        <div class="player"><strong>不要放过我#39114</strong><span>不死鸟 / Phoenix · 黄金2 · 当前敌方</span></div>
+        <div class="player"><strong>福CC#73449</strong><span>迷妄 / Miks · 白银3 · 当前敌方</span></div>
+        <div class="player"><strong>软萌暴君#31682</strong><span>雷兹 / Raze · 白银2 · 当前敌方</span></div>
+        <div class="player"><strong>摆烂小芙#10046</strong><span>黑梦 / Fade · 黄金1 · 当前敌方</span></div>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="panel">
+        <h2>疑似组队提示</h2>
+        <div class="cards">
+          <div class="relation good">
+            <div class="relation-head"><div class="relation-title">高置信双排</div><div class="score">86%</div></div>
+            <div class="pair">
+              <div class="person"><strong>康神开播了#73193</strong><span>我方 · KAY/O · 近10场 6胜4负</span></div>
+              <div class="link">↔</div>
+              <div class="person"><strong>小猫不急#47218</strong><span>我方 · Sage · 近10场 5胜5负</span></div>
+            </div>
+            <div class="notes">
+              <div><b>当前关系：</b>我方同队</div>
+              <div><b>历史证据：</b>近 10 场共同出现 4 场，其中 4 场同队</div>
+              <div><b>判断：</b>疑似双排，辅助位配合稳定</div>
+            </div>
+          </div>
+          <div class="relation bad">
+            <div class="relation-head"><div class="relation-title">敌方疑似双排</div><div class="score">72%</div></div>
+            <div class="pair">
+              <div class="person"><strong>别颗秒我#19729</strong><span>敌方 · Clove · 近5场 1胜4负</span></div>
+              <div class="link">↔</div>
+              <div class="person"><strong>不要放过我#39114</strong><span>敌方 · Phoenix · 近5场 3胜2负</span></div>
+            </div>
+            <div class="notes">
+              <div><b>当前关系：</b>当前敌方同队</div>
+              <div><b>历史证据：</b>近 10 场共同出现 3 场，其中 2 场同队</div>
+              <div><b>判断：</b>可能一起进攻侧打默认配合</div>
+            </div>
+          </div>
+          <div class="relation warn">
+            <div class="relation-head"><div class="relation-title">交叉对局关注</div><div class="score">58%</div></div>
+            <div class="pair">
+              <div class="person"><strong>GGbone#55989</strong><span>我方 · Reyna · 近期手感热</span></div>
+              <div class="link">↔</div>
+              <div class="person"><strong>福CC#73449</strong><span>敌方 · Miks · 多次碰面</span></div>
+            </div>
+            <div class="notes">
+              <div><b>当前关系：</b>本局互为敌方</div>
+              <div><b>历史证据：</b>过去 7 天同场 2 次，曾同队 1 次</div>
+              <div><b>判断：</b>不是稳定组队，但有交叉对局记录</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel table-wrap">
+        <h2>交叉对局记录</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:150px">时间</th>
+              <th>玩家 A</th>
+              <th>玩家 B</th>
+              <th style="width:110px">本局关系</th>
+              <th style="width:120px">历史关系</th>
+              <th style="width:90px">比分</th>
+              <th style="width:120px">地图</th>
+              <th style="width:160px">结论</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>07-18 12:44</td>
+              <td>康神开播了#73193</td>
+              <td>小猫不急#47218</td>
+              <td><span class="tag ally">我方</span></td>
+              <td><span class="tag same">同队</span></td>
+              <td>13:11</td>
+              <td>Triad</td>
+              <td>连续同队，疑似双排</td>
+            </tr>
+            <tr>
+              <td>07-17 23:08</td>
+              <td>别颗秒我#19729</td>
+              <td>不要放过我#39114</td>
+              <td><span class="tag enemy-tag">敌方</span></td>
+              <td><span class="tag same">同队</span></td>
+              <td>12:14</td>
+              <td>Bonsai</td>
+              <td>敌方疑似二人组</td>
+            </tr>
+            <tr>
+              <td>07-17 20:52</td>
+              <td>GGbone#55989</td>
+              <td>福CC#73449</td>
+              <td><span class="tag enemy-tag">敌方</span></td>
+              <td><span class="tag ally">同场</span></td>
+              <td>13:2</td>
+              <td>Ascent</td>
+              <td>近期多次同场</td>
+            </tr>
+            <tr>
+              <td>07-16 22:31</td>
+              <td>Li7#19671</td>
+              <td>摆烂小芙#10046</td>
+              <td><span class="tag enemy-tag">敌方</span></td>
+              <td><span class="tag enemy-tag">对手</span></td>
+              <td>9:13</td>
+              <td>Juliett</td>
+              <td>有历史对位记录</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="footer">
+          <span>提示：疑似组队仅基于公开战绩与同场记录推断，不等同于官方组队数据。</span>
+          <span>val.skzspro.cn/public</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+</body>
+</html>

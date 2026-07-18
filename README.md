@@ -175,6 +175,14 @@ WeGame 无畏契约战绩
 
 ![当前对局助手](assets/screenshots/live-assistant.png)
 
+### 疑似组队关系
+
+![疑似组队关系](assets/screenshots/party-insight.png)
+
+### QQ 群文本回复
+
+![QQ 群文本回复](assets/screenshots/qq-summary.png)
+
 ### 控制中心
 
 ![控制中心](assets/screenshots/ops-control-center.png)

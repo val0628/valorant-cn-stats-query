@@ -18,13 +18,14 @@ assets/screenshots/recent-matches.png
 assets/screenshots/live-assistant.png
 assets/screenshots/ops-control-center.png
 assets/screenshots/battle-detail.png
-```
-
-仍建议后续人工补充：
-
-```text
 assets/screenshots/party-insight.png
 assets/screenshots/qq-summary.png
+```
+
+说明：
+
+```text
+party-insight.png 和 qq-summary.png 为演示数据生成图，用于展示产品形态。
 ```
 
 ### 1. 公开查询页
@@ -124,7 +125,9 @@ assets/screenshots/ops-control-center.png
 
 1. `recent-matches.png`
 2. `live-assistant.png`
-3. `ops-control-center.png`
+3. `party-insight.png`
+4. `qq-summary.png`
+5. `ops-control-center.png`
 
 如果要做宣传图，建议标题：
 
