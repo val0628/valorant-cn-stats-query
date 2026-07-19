@@ -1,27 +1,81 @@
-# 无畏契约战绩查询 | WGame VAL Query
+<div align="center">
 
-国服《无畏契约》在线战绩查询、开局前房间队友分析、当前对局助手与 QQ 群战绩回复工具。
+# 无畏契约战绩查询 · WGame VAL Query
 
-> 搜索 `无畏契约战绩查询`、`瓦战绩查询`、`Valorant 国服战绩查询` 来到这里的玩家，可以直接去主站使用：
->
-> **在线查询入口：[https://val.skzspro.cn/public](https://val.skzspro.cn/public)**
->
-> **实时对局入口：[https://val.skzspro.cn/live](https://val.skzspro.cn/live)**
+**面向国服《无畏契约》的战绩查询、开局前房间分析与当前对局助手**
 
-输入一个 `昵称#ID`，快速查看无畏契约玩家近期战绩、英雄、KDA、ACS、地图和段位变化。实时连接游戏后，还能在开局前自动加载房间成员以及匹配补入队友的近 3 场战绩，并在当前对局中查看双方 10 名玩家。
+昵称#ID 直查近期状态 · 房间成员近 3 场 · 当前对局 10 人战绩 · 疑似组队识别
 
-这个仓库是项目的公开展示页：用于介绍功能、收集反馈、展示截图和发布更新记录。核心服务端不在本仓库开源，欢迎直接访问主站使用。
+<p>
+  <a href="https://val.skzspro.cn/public">
+    <img src="https://img.shields.io/badge/Public_Query-OPEN_NOW-F4C95D?style=for-the-badge" alt="打开公共战绩查询">
+  </a>
+  <a href="https://val.skzspro.cn/live">
+    <img src="https://img.shields.io/badge/Live_Match-ENTER_NOW-50C8A8?style=for-the-badge" alt="打开实时对局">
+  </a>
+  <a href="docs/USAGE.md">
+    <img src="https://img.shields.io/badge/User_Guide-READ-62B6FF?style=for-the-badge" alt="阅读使用教程">
+  </a>
+</p>
 
-## 在线无畏契约战绩查询
+<p>
+  <img src="https://img.shields.io/website?url=https%3A%2F%2Fval.skzspro.cn%2Fpublic&up_message=online&down_message=offline&style=flat-square&label=website" alt="网站状态">
+  <img src="https://img.shields.io/github/last-commit/val0628/valorant-cn-stats-query?style=flat-square&label=last%20update" alt="最近更新">
+  <img src="https://img.shields.io/badge/platform-VALORANT%20CN-EA526F?style=flat-square" alt="国服无畏契约">
+</p>
 
-主站地址：
+[效果预览](#效果预览) · [功能总览](#功能总览) · [快速开始](#快速开始) · [工作原理](#工作原理) · [项目文档](#项目文档)
 
-[https://val.skzspro.cn/public](https://val.skzspro.cn/public)
+</div>
 
-支持输入：
+> [!IMPORTANT]
+> 这是项目的公开展示仓库，提供产品介绍、使用教程、真实截图、更新记录和反馈入口。核心服务端、登录态处理、抓包链路和生产部署配置暂不公开，普通用户直接使用在线站点即可。
+
+> [!NOTE]
+> 本项目是非官方社区工具，与 Riot Games、腾讯、WeGame 无从属或合作关系。疑似组队等分析结果只作参考，不代表官方 Party 信息。
+
+## 一眼看懂
+
+很多时候，玩家真正需要的不是一张复杂的数据报表，而是在有限时间里快速回答几个问题：
+
+| 阶段 | 想知道什么 | WGame VAL Query 提供什么 |
+| --- | --- | --- |
+| 找人组队时 | 新进房间的玩家近期状态怎么样 | 房间成员近 3 场，成员加入或退出后自动同步 |
+| 匹配完成后 | 系统补入的其他队友是否稳定 | 自动补齐不在原房间中的同阵营玩家 |
+| 选人和加载阶段 | 双方英雄、段位和近期表现如何 | 当前对局 10 人战绩异步加载 |
+| 判断开黑关系时 | 哪些玩家可能一起排位 | 共同对局推断、彩色头像外圈和连接线 |
+| 只想查一个人时 | 最近输赢、KDA、ACS 和 RR 如何 | 输入 `昵称#ID` 直接查询近 10 场 |
+
+一句话概括：
+
+> **开局前看队友，匹配后看完整阵容，对局中快速了解双方近期状态。**
+
+## 效果预览
+
+### 开局前：房间成员与匹配队友近 3 场
+
+玩家进入或退出房间时，页面会自动重建列表；匹配组成完整队伍后，还会补入原 Party 之外的其他我方玩家。
+
+<a href="assets/screenshots/room-teammates-long.png">
+  <img src="assets/screenshots/room-teammates.png" alt="开局前房间成员与匹配队友近3场" width="100%">
+</a>
+
+### 当前对局：双方 10 人战绩与疑似组队
+
+左侧按我方和敌方展示当前英雄，右侧逐个加载每名玩家近 10 场战绩。最新版本还会用不同颜色的头像外圈与连接线标出疑似组队小队。
+
+<a href="assets/screenshots/current-match-real.png">
+  <img src="assets/screenshots/current-match-real.png" alt="无畏契约当前对局10人战绩" width="100%">
+</a>
+
+## 功能总览
+
+### 1. 昵称直查近期战绩
+
+打开[公共查询页](https://val.skzspro.cn/public)，输入：
 
 ```text
-玩家昵称#数字ID
+游戏昵称#数字ID
 ```
 
 例如：
@@ -30,290 +84,245 @@
 GGbone#55989
 ```
 
-适合用来查询：
+即可查看：
 
-- 无畏契约近期战绩
-- 国服 Valorant 战绩
-- WeGame 无畏契约战绩
-- 无畏契约玩家 KDA / ACS
-- 无畏契约当前对局玩家状态
-- QQ 群无畏契约战绩查询
+- 最近 10 场胜负与比分
+- 使用英雄及中英文名称
+- K/D/A、ACS、地图和对局时长
+- 当局段位与 RR 变化
+- 一血、多杀、MVP 等高光信息
+- 数据接口返回的公开省级 IP 属地
 
-## 实时对局入口
+### 2. 开局前房间成员近 3 场
 
-实时功能页：
+进入组队房间后，实时页面会持续识别成员变化：
 
-[https://val.skzspro.cn/live](https://val.skzspro.cn/live)
-
-按照页面里的连接步骤完成配置后，实时页会列出当前网络下仍有效的游戏账号。先按昵称选择自己的账号，再进入：
-
-- 房间近 3 场：开局前查看房间成员和匹配补入队友。
-- 当前对局 10 人：查看我方、敌方、英雄与每名玩家近 10 场战绩。
-
-网吧内多人可能共享同一个公网 IP，因此公网 IP 只用于缩小候选范围，不会直接认定某个账号属于当前访问者。页面必须由用户按昵称选择，浏览器会临时记住该选择；没有选择时不会自动加载其他人的对局。
-
-公共只读页面不需要管理口令。内部会话列表、token 推送、保存快照和管理接口仍受保护。
-
-## 它解决什么问题
-
-无畏契约玩家经常需要在很短时间内判断：
-
-- 队友最近状态怎么样。
-- 组队房间里新加入的玩家最近打得怎么样。
-- 匹配组成完整队伍后，其他我方玩家状态如何。
-- 对手是不是某个英雄绝活。
-- 某个玩家近几场是不是连败、补位、掉分。
-- 当前对局里谁和谁疑似一起排。
-- QQ 群里能不能直接发昵称查近 5 场。
-
-WGame VAL Query 想做的就是把这些信息放到一个更顺手的入口里。少点页面，多看结果。
-
-## 功能亮点
-
-### 开局前查看房间队友近 3 场
-
-进入组队房间后，实时页面会自动读取当前房间中的其他成员：
-
-- 每名队友加载近 3 场胜负、比分、英雄、KDA、ACS、地图、段位与 RR
 - 自动排除当前账号
-- 玩家加入或退出房间时自动刷新
-- 匹配成功后，自动补齐不在原房间中的其他我方玩家
+- 每名队友加载近 3 场核心数据
+- 玩家加入或退出时自动刷新
 - 区分“房间成员”和“匹配队友”
-- 显示查询进度，并生成可以直接复制到群聊的战绩摘要
+- 匹配完成后补齐其他我方玩家
+- 生成可直接复制到群聊的文本摘要
 
-这让玩家在正式进入对局前，就能了解开黑房间和匹配队友的近期状态。
+这部分不要求已经进入正式对局，适合找人组队、五排房间和开黑前快速了解队友。
 
-### 昵称#ID 直接查询
+### 3. 当前对局 10 人助手
 
-打开主站，输入：
+检测到选人或正式对局后，页面会：
 
-```text
-GGbone#55989
-```
+- 按我方 / 敌方排列双方玩家
+- 显示当前英雄头像
+- 用蓝色 / 红色内圈保留阵营识别
+- 异步加载每名玩家近 10 场战绩
+- 点击左侧玩家直接跳到对应数据
+- 展示段位、KDA、ACS、地图与近期胜负
+- 对共同对局关系进行辅助分析
 
-即可查看近期战绩：
+### 4. 疑似组队彩色连线
 
-- 胜负和比分
-- 英雄，中英文一起展示
-- K/D/A
-- ACS
-- 地图
-- 段位和 RR 变化
-- 最近几场胜率
+系统会比较同阵营玩家近 10 场中的共同对局：
 
-如果你只是想查战绩，直接打开：
+- 曾作为友方共同参赛的玩家会形成关系
+- 相互关联的多人自动合并成一个疑似小队
+- 每个小队使用不同颜色
+- 头像外圈、短分支、纵向连线和“组队 N”标签同步显示
 
-[https://val.skzspro.cn/public](https://val.skzspro.cn/public)
+这不是官方 PartyID，只是根据近期共同对局生成的辅助判断。
 
-### 当前对局助手
+### 5. 其他扩展能力
 
-进入对局后，可以生成当前对局页：
+| 功能 | 说明 | 状态 |
+| --- | --- | --- |
+| QQ 群战绩摘要 | 输入昵称，返回近 5 场纯文本战绩 | 已接入项目链路 |
+| 武器藏品 | 集中查看账号武器外观和图片 | 已完成 |
+| 公开 IP 属地 | 只显示公开省级属地，不显示真实 IP | 已完成 |
+| 运维控制中心 | 组件状态、日志、启停、重启和自动修复 | 已完成 |
+| WeGame 登录态保活 | 独立 `9223` Chrome 定时刷新登录态 | 已完成 |
 
-- 我方 / 敌方分组展示
-- 左侧显示双方玩家和当前英雄头像
-- 蓝色 / 红色内圈与卡片标识我方和敌方
-- 疑似组队玩家使用不同颜色的头像外圈与连接线关联
-- 同一疑似小队自动合并，并标注“组队 1 / 组队 2”
-- 每个玩家近 10 场战绩
-- 异步加载，谁查完谁先出现
-- 左侧玩家导航，点击直接滚到对应战绩
-- 疑似组队关系表
-- 交叉对局中是友方还是敌方
+## 快速开始
 
-疑似组队来自同阵营玩家近 10 场友方共同对局推断，只作为选人和沟通参考，不冒充官方 Party 信息。
+### 方式 A：只查询某个玩家
 
-### 公开 IP 属地
+不需要安装程序，也不需要连接游戏。
 
-项目可选展示数据接口返回的公开属地，例如：
+1. 打开[公共战绩查询](https://val.skzspro.cn/public)。
+2. 输入完整的 `昵称#ID`。
+3. 点击查询，等待近期战绩加载。
 
-```text
-IP属地：贵州
-```
+### 方式 B：查看与自己有关的实时房间和对局
 
-只展示公开属地，不展示真实 IP。
+1. 打开[实时对局入口](https://val.skzspro.cn/live)。
+2. 按页面给出的步骤完成连接和验证。
+3. 页面列出当前网络下仍有效的游戏账号后，按昵称选择自己的账号。
+4. 组队阶段进入“房间近 3 场”。
+5. 匹配完成后进入“当前对局 10 人”。
+6. 使用结束后，按页面的恢复步骤还原网络设置。
 
-### 武器藏品查看
+网吧内多人可能共享同一个公网 IP，所以 IP 只用于缩小候选范围。系统不会自动把同 IP 下最新上传的对局认定为你的对局，必须由用户按昵称选择。
 
-藏品页可以集中查看账号武器外观和对应图片，作为战绩与对局助手之外的扩展功能。
+更完整的操作步骤、页面状态说明和故障排查见：
 
-### QQ 群战绩回复
+> **[使用教程：从昵称查询到实时对局](docs/USAGE.md)**
 
-QQ 插件可接入主站接口，用户发送：
+## 页面画廊
 
-```text
-查瓦 GGbone#55989
-```
+所有截图均来自实际运行页面或脱敏演示数据，真实昵称、标签和内部查询标识已隐藏。
 
-机器人返回近 5 场纯文本战绩，适合群内快速查看。
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/player-record.png">
+        <img src="assets/screenshots/player-record.png" alt="单个玩家近期战绩">
+      </a>
+      <br>
+      <strong>单个玩家近期战绩</strong>
+      <br>
+      近 10 场、英雄、KDA、ACS、地图、段位和 RR。
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/query-real.png">
+        <img src="assets/screenshots/query-real.png" alt="昵称查询结果">
+      </a>
+      <br>
+      <strong>昵称#ID 查询结果</strong>
+      <br>
+      面向普通用户的公共查询结果页。
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/collection-real.png">
+        <img src="assets/screenshots/collection-real.png" alt="武器藏品查看">
+      </a>
+      <br>
+      <strong>武器藏品</strong>
+      <br>
+      集中查看账号拥有的武器外观。
+    </td>
+    <td width="50%" valign="top">
+      <a href="assets/screenshots/control-center-real.png">
+        <img src="assets/screenshots/control-center-real.png" alt="项目运维控制中心">
+      </a>
+      <br>
+      <strong>运维控制中心</strong>
+      <br>
+      服务健康状态、日志、组件控制和自动修复。
+    </td>
+  </tr>
+</table>
 
-### 运维控制中心
+<details>
+<summary><strong>查看更多页面截图</strong></summary>
 
-项目后端配套了本地控制中心，用来管理服务组件：
+<br>
 
-- 主查询服务
-- 公网代理
-- FRP
-- 专用 Chrome 登录态
-- 属地数据抓包
-- 登录态推送
-- 好友 subject 缓存监听
+- [完整房间成员长图（1600 × 3200）](assets/screenshots/room-teammates-long.png)
+- [当前对局疑似组队关系](assets/screenshots/party-insight.png)
+- [单局详情](assets/screenshots/battle-detail.png)
+- [QQ 群文本回复](assets/screenshots/qq-summary.png)
+- [完整截图清单](docs/SCREENSHOTS.md)
 
-控制中心支持状态检测、启动、停止、重启、自动修复和日志查看。专用 Chrome 使用独立的 `9223` 调试端口，服务会定时刷新 WeGame 登录态；WeGame 客户端的 `9222` 仅作为备用查询通道。
+</details>
 
-## 项目架构
+## 工作原理
 
 ```mermaid
 flowchart LR
-  User["玩家 / QQ 群 / 浏览器"] --> Site["val.skzspro.cn 主站"]
-  Site --> Query["昵称#ID 查询"]
-  Site --> Room["房间队友近3场"]
-  Site --> Live["当前对局助手"]
-  Site --> Bot["QQ 文本回复"]
+  User["玩家 / 浏览器 / QQ 群"] --> Public["公共查询与实时入口"]
 
-  Query --> Wg["WeGame 战绩数据"]
-  Room --> Party["房间成员 + 匹配补入队友"]
-  Live --> Match["当前对局玩家"]
-  Query --> Location["公开 IP 属地"]
+  Public --> Query["昵称#ID 查询"]
+  Public --> Select["选择自己的实时账号"]
 
-  Ops["控制中心"] --> Health["组件检测"]
-  Ops --> Logs["详细日志"]
-  Ops --> Repair["自动修复"]
+  Query --> Records["近期战绩与公开资料"]
+  Select --> Room["组队房间成员"]
+  Select --> Match["当前对局双方玩家"]
+
+  Room --> Three["每人近 3 场"]
+  Match --> Ten["每人近 10 场"]
+  Ten --> Party["共同对局与疑似组队"]
+
+  Ops["本地控制中心"] --> Health["组件健康检查"]
+  Ops --> Logs["日志与自动修复"]
 ```
 
-## 在线体验
+实时链路的核心原则是：
 
-战绩查询：
+1. 先识别与当前网络有关的有效账号。
+2. 再由用户按游戏昵称选择自己的账号。
+3. 房间和当前对局页面只读取这个明确选择。
+4. 对外响应移除内部 session、subject、PartyID、原始事件 ID 和 token 来源。
 
-[https://val.skzspro.cn/public](https://val.skzspro.cn/public)
+## 隐私与安全边界
 
-实时对局：
+- 不展示玩家真实 IP。
+- 只展示数据接口返回的公开省级 IP 属地。
+- 同网络筛选只用于寻找候选账号，不能代替用户选择。
+- 未选择账号时，不自动加载任何实时对局。
+- 公共页面不会返回内部会话标识、原始玩家标识或登录凭据。
+- 内部会话列表、token 推送、快照保存和管理接口继续受保护。
+- Issue 中请勿提交 Cookie、token、抓包文件、登录二维码或私人聊天内容。
 
-[https://val.skzspro.cn/live](https://val.skzspro.cn/live)
+完整说明见[隐私说明](docs/PRIVACY.md)和[常见问题](docs/FAQ.md)。
 
-战绩查询体验方式：
+## 项目状态
 
-1. 打开主站。
-2. 输入一个国服无畏契约 `昵称#ID`。
-3. 查看近期战绩。
-4. 如果你是 QQ 群服主，可以关注后续 QQ 插件接入说明。
+| 模块 | 当前状态 |
+| --- | --- |
+| 公共昵称查询 | 可用 |
+| 房间成员近 3 场 | 可用 |
+| 匹配补入队友 | 可用 |
+| 当前对局 10 人 | 可用 |
+| 疑似组队彩色连线 | 可用 |
+| QQ 群文本摘要 | 项目链路已支持，公开接入方式整理中 |
+| 核心服务端源码 | 暂不公开 |
 
-实时功能体验方式：
+## 项目文档
 
-1. 打开实时对局页并按页面步骤连接游戏。
-2. 根据游戏昵称选择自己的账号。
-3. 组队阶段进入“房间近 3 场”。
-4. 匹配完成后进入“当前对局 10 人”。
+| 文档 | 内容 |
+| --- | --- |
+| [使用教程](docs/USAGE.md) | 昵称查询、实时连接、账号选择和常见故障 |
+| [更新日志](docs/CHANGELOG.md) | 每次功能更新与行为变化 |
+| [FAQ](docs/FAQ.md) | 部署、隐私、房间成员和疑似组队说明 |
+| [Roadmap](docs/ROADMAP.md) | 已完成功能与后续计划 |
+| [隐私说明](docs/PRIVACY.md) | 展示范围和禁止提交的敏感信息 |
+| [截图清单](docs/SCREENSHOTS.md) | 公开截图用途和内容说明 |
 
-常见搜索词：
+## 反馈与贡献
 
-```text
-无畏契约战绩查询
-无畏契约近期战绩查询
-瓦战绩查询
-Valorant 战绩查询
-国服无畏契约战绩查询
-WeGame 无畏契约战绩
-无畏契约当前对局助手
-无畏契约 QQ 机器人战绩查询
-```
+欢迎通过 [GitHub Issues](https://github.com/val0628/valorant-cn-stats-query/issues) 提交：
 
-## 截图
+- 查询失败的昵称样例和发生时间
+- 页面体验与移动端建议
+- 希望增加的战绩字段
+- 房间和当前对局功能建议
+- QQ 群接入场景
 
-以下图片均来自实际运行页面，并已隐藏真实昵称、标签和内部查询标识。
+提交问题时不要附带 Cookie、token、抓包文件或任何私人登录态。
 
-### 开局前房间队友近 3 场
+## 公开范围
 
-![房间队友近3场](assets/screenshots/room-teammates.png)
+本仓库公开：
 
-### 当前对局 10 人阵容
+- 项目介绍与使用教程
+- 脱敏后的产品截图
+- 更新日志、FAQ 与 Roadmap
+- 可公开的轻量演示页面
 
-![当前对局助手](assets/screenshots/current-match-real.png)
+本仓库不公开：
 
-### 单个玩家近期战绩
-
-![单个玩家近期战绩](assets/screenshots/player-record.png)
-
-### 昵称查询结果
-
-![昵称查询结果](assets/screenshots/query-real.png)
-
-### 武器藏品
-
-![武器藏品](assets/screenshots/collection-real.png)
-
-### 控制中心
-
-![控制中心](assets/screenshots/control-center-real.png)
-
-完整房间长图：[查看 1600×3200 详情图](assets/screenshots/room-teammates-long.png)。
-
-概念演示图和 QQ 群文本回复图仍保留在 `assets/screenshots`，用于展示不同使用场景。
-
-截图清单见：[docs/SCREENSHOTS.md](docs/SCREENSHOTS.md)
-
-## 更新日志
-
-完整更新记录见：[docs/CHANGELOG.md](docs/CHANGELOG.md)
-
-## 与 5EBOX 的关系
-
-很多玩家都熟悉 5EBOX 那种“进局前快速看信息”的体验。
-
-这个项目的目标不是复制某个产品，而是把国服无畏契约玩家真正想看的东西重新组合起来：
-
-- 更贴合 WeGame 国服环境
-- 支持昵称#ID 查询
-- 支持开局前房间队友近 3 场
-- 匹配成功后自动补齐其他我方玩家
-- 支持 QQ 群文本战绩
-- 支持当前对局页
-- 后端有控制中心，方便长期维护
-
-它是一次从抓包、接口、页面、插件到运维控制中心的完整共创，也是一份很值得纪念的项目。
-
-## Roadmap
-
-- 开放更友好的 QQ 插件接入方式
-- 增加玩家英雄偏好和地图表现摘要
-- 做移动端更舒服的查询页面
-- 增加查询结果分享卡片
-- 制作完整项目演示视频
+- 核心服务端代码
+- 登录态和 token 处理
+- 抓包链路与生产配置
+- 本地数据、缓存和日志
 
 ## Star
 
-如果你觉得这个工具有用，欢迎点一个 Star。
+如果这个项目对你有帮助，欢迎点一个 Star。
 
-Star 对这个项目很重要：它能让更多国服无畏契约玩家看到这个入口，也能鼓励我们继续把它做得更稳定、更好看、更像玩家真正想用的工具。
+Star 会让更多搜索“无畏契约战绩查询”“瓦战绩查询”“Valorant 国服战绩查询”的玩家找到这个入口，也会推动房间分析、当前对局助手和 QQ 群查询继续完善。
 
-## 反馈
+<div align="center">
 
-欢迎通过 GitHub Issues 提交：
+**[打开公共查询](https://val.skzspro.cn/public) · [进入实时对局](https://val.skzspro.cn/live) · [阅读使用教程](docs/USAGE.md)**
 
-- 查询失败的昵称样例
-- 页面建议
-- QQ 插件需求
-- 当前对局助手建议
-- 你希望看到的新字段
-
-请不要在 Issue 中粘贴 Cookie、token、抓包文件或任何私人登录态。
-
-## 开源范围
-
-本仓库只公开：
-
-- 项目介绍
-- 使用说明
-- 截图清单
-- 更新记录
-- 反馈入口
-- 可公开的轻量示例
-
-核心服务端、抓包链路、登录态处理和生产部署配置暂不公开。用户请直接访问主站使用。
-
-## 免责声明
-
-本项目为非官方社区工具，与 Riot Games、腾讯、WeGame 无从属或合作关系。
-
-项目仅用于学习、研究和个人数据展示。请遵守游戏、平台和相关服务条款，不要用于骚扰、作弊、绕过访问控制或侵犯他人隐私。
-
-本项目只展示官方接口返回的公开资料和公开 IP 属地，不提取、不展示玩家真实 IP。
+</div>
