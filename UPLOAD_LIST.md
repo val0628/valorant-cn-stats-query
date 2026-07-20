@@ -16,6 +16,7 @@ C:\Users\wcn\Desktop\wgame-val-query
 
 ```text
 README.md
+DISCLAIMER.md
 UPLOAD_LIST.md
 docs/
 assets/
