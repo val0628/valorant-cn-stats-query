@@ -16,6 +16,8 @@ assets/screenshots/
 assets/screenshots/room-teammates.png
 assets/screenshots/room-teammates-long.png
 assets/screenshots/current-match-real.png
+assets/screenshots/battle-hit-distribution.png
+assets/screenshots/party-analysis.png
 assets/screenshots/player-record.png
 assets/screenshots/query-real.png
 assets/screenshots/control-center-real.png
@@ -32,8 +34,9 @@ assets/screenshots/qq-summary.png
 说明：
 
 ```text
-新增的 *-real.png、room-teammates*.png 和 player-record.png
-均来自实际运行页面，并已隐藏真实昵称、标签和内部查询标识。
+新增的 *-real.png、room-teammates*.png、player-record.png、
+battle-hit-distribution.png 和 party-analysis.png
+均来自实际运行页面，昵称等可识别信息已做遮挡，且不包含内部查询标识。
 party-insight.png 和 qq-summary.png 为演示数据生成图，用于展示产品形态。
 ```
 
@@ -79,7 +82,27 @@ assets/screenshots/player-record.png
 
 画面包含英雄、KDA、ACS、地图、段位、RR 与高光数据。
 
-### 4. 公开查询页
+### 4. 单局 10 人命中分布
+
+文件名：
+
+```text
+assets/screenshots/battle-hit-distribution.png
+```
+
+画面展示双方 10 人的英雄、段位、K/D/A、ACS/分数、单局爆头率和头/身/腿命中分布。
+
+### 5. 疑似组队共同对局分析
+
+文件名：
+
+```text
+assets/screenshots/party-analysis.png
+```
+
+画面展示主动展开后的疑似小队、共同场次、友方/敌方关系和共同对局样例。
+
+### 6. 公开查询页
 
 文件名：
 
@@ -99,7 +122,7 @@ https://val.skzspro.cn/public
 - 页面干净，不露后台管理信息。
 - 最好能看到主站品牌或页面标题。
 
-### 5. 武器藏品
+### 7. 武器藏品
 
 文件名：
 
@@ -109,7 +132,7 @@ assets/screenshots/collection-real.png
 
 画面展示武器外观列表和图片。
 
-### 6. 控制中心
+### 8. 控制中心
 
 文件名：
 
@@ -198,9 +221,11 @@ assets/screenshots/ops-control-center.png
 
 1. `room-teammates.png`
 2. `current-match-real.png`
-3. `player-record.png`
-4. `query-real.png`
-5. `control-center-real.png`
+3. `battle-hit-distribution.png`
+4. `party-analysis.png`
+5. `player-record.png`
+6. `query-real.png`
+7. `control-center-real.png`
 
 如果要做宣传图，建议标题：
 
